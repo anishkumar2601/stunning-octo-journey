@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>NEXUS STORE · play beyond</title>
+  <!-- Premium fonts & icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ---------- CSS RESET & DESIGN SYSTEM ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* dark theme (default) */
+      --bg-primary: #0b0e14;
+      --bg-secondary: #141a24;
+      --bg-tertiary: #1e2632;
+      --surface-glass: rgba(20, 30, 45, 0.7);
+      --text-primary: #f0f3fa;
+      --text-secondary: #b0c0d0;
+      --accent-glow: #3b82f6;
+      --accent-gradient: linear-gradient(145deg, #3b82f6, #a855f7);
+      --card-shadow: 0 20px 35px -8px rgba(0,0,0,0.7), 0 0 0 1px rgba(75, 130, 255, 0.15);
+      --hover-glow: 0 0 25px rgba(59,130,246,0.5);
+      --discount-badge: #ef4444;
+      --wishlist-heart: #ff4d6d;
+      --transition-smooth: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --border-light: rgba(255,255,255,0.06);
+      --nav-blur: blur(20px);
+    }
+
+    body.light {
+      --bg-primary: #f5f7fc;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #eef2f6;
+      --surface-glass: rgba(255,255,255,0.75);
+      --text-primary: #121826;
+      --text-secondary: #374151;
+      --accent-glow: #2563eb;
+      --accent-gradient: linear-gradient(145deg, #2563eb, #7c3aed);
+      --card-shadow: 0 15px 30px -10px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.02);
+      --hover-glow: 0 0 20px rgba(37,99,235,0.2);
+      --border-light: rgba(0,0,0,0.05);
+      --nav-blur: blur(24px);
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      transition: background 0.3s ease, color 0.2s ease;
+      min-height: 100vh;
+      backdrop-filter: none;
+    }
+
+    /* glassmorphism utility */
+    .glass-panel {
+      background: var(--surface-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-light);
+    }
+
+    /* layout */
+    .app-wrapper {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---------- NAVIGATION ---------- */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      margin-bottom: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--surface-glass);
+      backdrop-filter: var(--nav-blur);
+      -webkit-backdrop-filter: var(--nav-blur);
+      border-bottom: 1px solid var(--border-light);
+      border-radius: 0 0 24px 24px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .logo {
+      font-family: "Outfit", sans-serif;
+      font-weight: 900;
+      font-size: 1.9rem;
+      letter-spacing: -0.02em;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 8px rgba(59,130,246,0.4);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: inherit;
+      font-size: 1rem;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-links a:hover {
+      color: var(--text-primary);
+      text-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .theme-toggle {
+      background: var(--bg-tertiary);
+      border: none;
+      border-radius: 40px;
+      padding: 8px 12px;
+      cursor: pointer;
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      transition: var(--transition-smooth);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .profile-icon {
+      font-size: 1.8rem;
+      color: var(--text-secondary);
+      transition: var(--transition-smooth);
+    }
+    .profile-icon:hover { color: var(--accent-glow); }
+
+    /* ---------- HERO CAROUSEL ---------- */
+    .hero-carousel {
+      position: relative;
+      border-radius: 32px;
+      overflow: hidden;
+      margin: 28px 0 40px;
+      box-shadow: var(--card-shadow);
+      height: 420px;
+    }
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.6s ease-in-out;
+    }
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center 30%;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+    }
+    .slide-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, transparent 70%);
+    }
+    .slide-content {
+      position: relative;
+      z-index: 5;
+      padding: 48px;
+      max-width: 600px;
+      animation: fadeSlide 0.5s ease-out;
+    }
+    .slide-badge {
+      background: var(--accent-glow);
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: inline-block;
+      margin-bottom: 16px;
+      backdrop-filter: blur(4px);
+    }
+    .slide-title {
+      font-size: 3.5rem;
+      font-weight: 900;
+      font-family: "Outfit", sans-serif;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      text-shadow: 0 8px 20px black;
+    }
+    .slide-cta {
+      background: white;
+      color: #0b0e14;
+      border: none;
+      padding: 14px 36px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      box-shadow: 0 10px 25px -5px #00000080;
+    }
+    .slide-cta:hover {
+      transform: scale(1.03);
+      background: var(--accent-glow);
+      color: white;
+      box-shadow: 0 0 30px var(--accent-glow);
+    }
+    .carousel-indicators {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+    }
+    .indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.4);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .indicator.active {
+      width: 32px;
+      background: white;
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    /* ---------- CATEGORY ROWS (scroll reveal) ---------- */
+    .section-title {
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin: 40px 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .game-row {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 12px 4px 28px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-glow) var(--bg-tertiary);
+    }
+    .game-row::-webkit-scrollbar { height: 6px; }
+    .game-row::-webkit-scrollbar-thumb { background: var(--accent-glow); border-radius: 10px; }
+
+    /* ---------- GAME CARD (universal) ---------- */
+    .game-card {
+      flex: 0 0 200px;
+      background: var(--bg-secondary);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition-smooth);
+      cursor: pointer;
+      border: 1px solid var(--border-light);
+      backdrop-filter: blur(4px);
+      position: relative;
+    }
+    .game-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: var(--hover-glow), var(--card-shadow);
+      border-color: var(--accent-glow);
+    }
+    .card-media {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+    }
+    .card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .game-card:hover img { transform: scale(1.08); }
+    .discount-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--discount-badge);
+      color: white;
+      font-weight: 800;
+      padding: 6px 10px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      box-shadow: 0 4px 10px rgba(239,68,68,0.5);
+      z-index: 3;
+    }
+    .wishlist-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      z-index: 5;
+    }
+    .wishlist-btn:hover { background: var(--wishlist-heart); transform: scale(1.1); }
+    .wishlist-btn.active { color: var(--wishlist-heart); background: white; }
+    .card-info {
+      padding: 16px 14px 18px;
+    }
+    .game-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .game-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .price {
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .original-price {
+      text-decoration: line-through;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-right: 6px;
+    }
+    .rating {
+      color: #fbbf24;
+      font-size: 0.9rem;
+    }
+
+    /* ---------- MAIN LAYOUT: SIDEBAR + GRID ---------- */
+    .store-layout {
+      display: flex;
+      gap: 28px;
+      margin: 30px 0 50px;
+    }
+    .filter-sidebar {
+      flex: 0 0 260px;
+      background: var(--bg-secondary);
+      padding: 24px 20px;
+      border-radius: 28px;
+      height: fit-content;
+      border: 1px solid var(--border-light);
+      backdrop-filter: blur(8px);
+    }
+    .filter-header {
+      font-weight: 700;
+      margin-bottom: 24px;
+      font-size: 1.3rem;
+    }
+    .filter-group {
+      margin-bottom: 28px;
+    }
+    .filter-group h4 {
+      margin-bottom: 12px;
+      color: var(--text-secondary);
+    }
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .search-wrapper {
+      display: flex;
+      background: var(--bg-tertiary);
+      border-radius: 60px;
+      padding: 6px 6px 6px 20px;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+    .search-wrapper input {
+      background: transparent;
+      border: none;
+      padding: 12px 0;
+      font-size: 1rem;
+      width: 100%;
+      color: var(--text-primary);
+      outline: none;
+    }
+    .search-wrapper button {
+      background: var(--accent-glow);
+      border: none;
+      border-radius: 40px;
+      padding: 10px 18px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .game-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 24px;
+      align-content: start;
+    }
+
+    /* skeleton loader */
+    .skeleton-card {
+      background: var(--bg-tertiary);
+      border-radius: 20px;
+      height: 320px;
+      animation: pulse 1.6s infinite;
+    }
+    @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+    /* modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.25s;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background: var(--bg-secondary);
+      max-width: 800px;
+      width: 90%;
+      border-radius: 40px;
+      padding: 32px;
+      position: relative;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 40px 80px #00000050;
+    }
+    .modal-close {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      font-size: 28px;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    /* responsiveness */
+    @media (max-width: 900px) {
+      .store-layout { flex-direction: column; }
+      .filter-sidebar { flex: auto; width: 100%; }
+      .navbar { flex-wrap: wrap; }
+      .slide-title { font-size: 2.5rem; }
+      .hero-carousel { height: 320px; }
+    }
+
+    .filter-toggle-mobile {
+      display: none;
+      background: var(--accent-gradient);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 16px;
+      font-weight: bold;
+    }
+    @media (max-width: 700px) {
+      .filter-toggle-mobile { display: block; }
+      .filter-sidebar { display: none; }
+      .filter-sidebar.open { display: block; }
+      .game-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* animations */
+    .fade-up { opacity: 0; transform: translateY(20px); transition: 0.6s; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body class="dark">
+  <div class="app-wrapper">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="logo"><i class="fas fa-gamepad" style="margin-right: 8px;"></i>NEXUS</div>
+      <div class="nav-links">
+        <a href="#"><i class="fas fa-store"></i> Store</a>
+        <a href="#"><i class="fas fa-layer-group"></i> Library</a>
+        <a href="#"><i class="fas fa-users"></i> Community</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="theme"><i class="fas fa-sun"></i><i class="fas fa-moon" style="margin-left: 6px;"></i></button>
+        <i class="fas fa-user-circle profile-icon"></i>
+      </div>
+    </nav>
+
+    <!-- Hero Carousel -->
+    <div class="hero-carousel" id="heroCarousel">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide" style="background-image: url('https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <span class="slide-badge">FEATURED · NEW EXPANSION</span>
+            <h2 class="slide-title">CYBER PHANTOM</h2>
+            <p style="margin-bottom: 24px; font-size: 1.2rem; text-shadow: 0 2px 10px black;">Pre-order now · Early access bonus</p>
+            <button class="slide-cta"><i class="fas fa-bolt"></i> PRE-ORDER $59.99</button>
+          </div>
+        </div>
+        <div class="carousel-slide" style="background-image: url('https://images.pexels.com/photos/9072217/pexels-photo-9072217.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <span class="slide-badge">TOP SELLER</span>
+            <h2 class="slide-title">ELDEN LEGACY</h2>
+            <p style="margin-bottom: 24px;">Shadow of the Erdtree available now</p>
+            <button class="slide-cta"><i class="fas fa-cart-shopping"></i> ADD TO CART</button>
+          </div>
+        </div>
+        <div class="carousel-slide" style="background-image: url('https://images.pexels.com/photos/777001/pexels-photo-777001.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <span class="slide-badge">MULTIPLAYER MAYHEM</span>
+            <h2 class="slide-title">APEX STRIKE</h2>
+            <button class="slide-cta"><i class="fas fa-play"></i> PLAY FOR FREE</button>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-indicators" id="carouselIndicators"></div>
+    </div>
+
+    <!-- Category rows: Trending, New Releases, Top Sellers (scroll reveal on view) -->
+    <section>
+      <div class="section-title"><i class="fas fa-fire" style="color: #f97316;"></i> Trending now</div>
+      <div class="game-row" id="trendingRow"></div>
+    </section>
+    <section>
+      <div class="section-title"><i class="fas fa-calendar-star"></i> New Releases</div>
+      <div class="game-row" id="newReleasesRow"></div>
+    </section>
+    <section>
+      <div class="section-title"><i class="fas fa-crown" style="color: gold;"></i> Top Sellers</div>
+      <div class="game-row" id="topSellersRow"></div>
+    </section>
+
+    <!-- Filter toggle (mobile) -->
+    <button class="filter-toggle-mobile" id="filterToggle"><i class="fas fa-sliders-h"></i> Filters</button>
+
+    <!-- Main store area: sidebar + grid -->
+    <div class="store-layout">
+      <aside class="filter-sidebar glass-panel" id="filterSidebar">
+        <div class="filter-header"><i class="fas fa-filter"></i> Refine</div>
+        <div class="search-wrapper">
+          <input type="text" placeholder="Search games..." id="searchInput">
+          <button id="searchBtn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="filter-group">
+          <h4>Genre</h4>
+          <label class="filter-option"><input type="checkbox" value="Action" class="genre-filter"> Action</label>
+          <label class="filter-option"><input type="checkbox" value="RPG" class="genre-filter"> RPG</label>
+          <label class="filter-option"><input type="checkbox" value="Strategy" class="genre-filter"> Strategy</label>
+          <label class="filter-option"><input type="checkbox" value="Adventure" class="genre-filter"> Adventure</label>
+        </div>
+        <div class="filter-group">
+          <h4>Price</h4>
+          <label class="filter-option"><input type="radio" name="price" value="all" checked> All</label>
+          <label class="filter-option"><input type="radio" name="price" value="under20"> Under $20</label>
+          <label class="filter-option"><input type="radio" name="price" value="20-40"> $20 - $40</label>
+          <label class="filter-option"><input type="radio" name="price" value="over40"> Over $40</label>
+        </div>
+        <div class="filter-group">
+          <h4>Platform</h4>
+          <label class="filter-option"><input type="checkbox" value="PC" class="platform-filter"> PC</label>
+          <label class="filter-option"><input type="checkbox" value="Xbox" class="platform-filter"> Xbox</label>
+          <label class="filter-option"><input type="checkbox" value="PlayStation" class="platform-filter"> PlayStation</label>
+        </div>
+        <button id="clearFilters" style="width:100%; background: transparent; border:1px solid var(--border-light); padding:12px; border-radius:40px; color:var(--text-primary);"><i class="fas fa-undo-alt"></i> Clear all</button>
+      </aside>
+
+      <!-- Game grid with skeleton placeholders -->
+      <div class="game-grid" id="mainGameGrid">
+        <!-- skeleton injected then replaced by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Detail Modal -->
+  <div class="modal-overlay" id="gameModal">
+    <div class="modal-content">
+      <i class="fas fa-times modal-close" id="closeModal"></i>
+      <div id="modalBody">loading...</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      "use strict";
+
+      // ---------- MOCK DATABASE (16+ games) ----------
+      const gamesData = [
+        { id:1, title:"Cyber Phantom", price:59.99, discount:0, originalPrice:59.99, genre:"Action", platform:["PC","Xbox"], rating:4.8, cover:"https://picsum.photos/id/1043/300/400", trending:true, newRelease:false, topSeller:true },
+        { id:2, title:"Elden Legacy", price:49.99, discount:20, originalPrice:62.99, genre:"RPG", platform:["PC","PlayStation"], rating:4.9, cover:"https://picsum.photos/id/1047/300/400", trending:true, newRelease:false, topSeller:true },
+        { id:3, title:"Apex Strike", price:0.00, discount:0, genre:"Action", platform:["PC","Xbox","PlayStation"], rating:4.3, cover:"https://picsum.photos/id/106/300/400", trending:true, newRelease:false, topSeller:false },
+        { id:4, title:"Forza Horizon X", price:69.99, discount:15, originalPrice:82.99, genre:"Racing", platform:["Xbox","PC"], rating:4.7, cover:"https://picsum.photos/id/107/300/400", trending:false, newRelease:true, topSeller:true },
+        { id:5, title:"Starfield Odyssey", price:69.99, discount:0, genre:"RPG", platform:["PC","Xbox"], rating:4.5, cover:"https://picsum.photos/id/108/300/400", trending:false, newRelease:true, topSeller:false },
+        { id:6, title:"Hollow Knight: Silksong", price:29.99, discount:10, originalPrice:33.99, genre:"Adventure", platform:["PC","PlayStation"], rating:4.9, cover:"https://picsum.photos/id/109/300/400", trending:true, newRelease:true, topSeller:false },
+        { id:7, title:"Diablo IV", price:49.99, discount:25, originalPrice:66.99, genre:"RPG", platform:["PC","Xbox","PlayStation"], rating:4.6, cover:"https://picsum.photos/id/110/300/400", trending:false, newRelease:false, topSeller:true },
+        { id:8, title:"Call of Duty: MW3", price:69.99, discount:0, genre:"Action", platform:["PC","Xbox","PlayStation"], rating:4.2, cover:"https://picsum.photos/id/111/300/400", trending:true, newRelease:false, topSeller:true },
+        { id:9, title:"Cities: Skylines II", price:39.99, discount:5, originalPrice:42.99, genre:"Strategy", platform:["PC"], rating:4.4, cover:"https://picsum.photos/id/112/300/400", trending:false, newRelease:true, topSeller:false },
+        { id:10, title:"Baldur's Gate 3", price:59.99, discount:0, genre:"RPG", platform:["PC","PlayStation"], rating:5.0, cover:"https://picsum.photos/id/113/300/400", trending:true, newRelease:false, topSeller:true },
+        { id:11, title:"Assassin's Creed Mirage", price:49.99, discount:30, originalPrice:71.99, genre:"Adventure", platform:["PC","Xbox","PlayStation"], rating:4.1, cover:"https://picsum.photos/id/114/300/400", trending:false, newRelease:false, topSeller:false },
+        { id:12, title:"Sea of Thieves", price:39.99, discount:0, genre:"Adventure", platform:["Xbox","PC"], rating:4.5, cover:"https://picsum.photos/id/115/300/400", trending:false, newRelease:false, topSeller:true },
+        { id:13, title:"Age of Empires IV", price:34.99, discount:40, originalPrice:58.99, genre:"Strategy", platform:["PC"], rating:4.3, cover:"https://picsum.photos/id/116/300/400", trending:false, newRelease:false, topSeller:false },
+        { id:14, title:"Redfall", price:29.99, discount:0, genre:"Action", platform:["Xbox","PC"], rating:3.8, cover:"https://picsum.photos/id/117/300/400", trending:false, newRelease:true, topSeller:false },
+        { id:15, title:"Persona 5 Royal", price:59.99, discount:20, originalPrice:74.99, genre:"RPG", platform:["PC","PlayStation"], rating:4.9, cover:"https://picsum.photos/id/118/300/400", trending:true, newRelease:false, topSeller:false },
+        { id:16, title:"Dead Space Remake", price:49.99, discount:0, genre:"Action", platform:["PC","Xbox","PlayStation"], rating:4.7, cover:"https://picsum.photos/id/119/300/400", trending:false, newRelease:true, topSeller:false }
+      ];
+
+      // ---------- GLOBAL VARS ----------
+      const mainGrid = document.getElementById('mainGameGrid');
+      const trendingRow = document.getElementById('trendingRow');
+      const newRow = document.getElementById('newReleasesRow');
+      const topRow = document.getElementById('topSellersRow');
+      let currentFiltered = [...gamesData];
+
+      // ---------- RENDER FUNCTIONS ----------
+      function createGameCard(game) {
+        const card = document.createElement('div');
+        card.className = 'game-card fade-up';
+        card.dataset.id = game.id;
+        const finalPrice = game.discount ? (game.price * (1 - game.discount/100)).toFixed(2) : game.price.toFixed(2);
+        const showOriginal = game.discount ? `<span class="original-price">$${game.originalPrice.toFixed(2)}</span>` : '';
+        const discountBadge = game.discount ? `<span class="discount-badge">-${game.discount}%</span>` : '';
+        
+        card.innerHTML = `
+          <div class="card-media">
+            <img src="${game.cover}" alt="${game.title}" loading="lazy">
+            ${discountBadge}
+            <button class="wishlist-btn" data-id="${game.id}"><i class="far fa-heart"></i></button>
+          </div>
+          <div class="card-info">
+            <div class="game-title">${game.title}</div>
+            <div class="game-meta">
+              <span class="price">${showOriginal} $${finalPrice}</span>
+              <span class="rating"><i class="fas fa-star"></i> ${game.rating}</span>
+            </div>
+          </div>
+        `;
+        card.addEventListener('click', (e) => {
+          if(e.target.closest('.wishlist-btn')) return;
+          openModal(game);
+        });
+        card.querySelector('.wishlist-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          const btn = e.currentTarget;
+          btn.classList.toggle('active');
+          const icon = btn.querySelector('i');
+          icon.classList.toggle('far');
+          icon.classList.toggle('fas');
+        });
+        return card;
+      }
+
+      function renderGrid(gamesArray) {
+        mainGrid.innerHTML = '';
+        if(gamesArray.length===0) {
+          mainGrid.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:40px;">No games match</p>';
+          return;
+        }
+        gamesArray.forEach(g => mainGrid.appendChild(createGameCard(g)));
+        setTimeout(() => document.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible')), 20);
+      }
+
+      function renderCategoryRows() {
+        [trendingRow, newRow, topRow].forEach(r => r.innerHTML = '');
+        const trending = gamesData.filter(g=>g.trending).slice(0,8);
+        const newR = gamesData.filter(g=>g.newRelease).slice(0,8);
+        const top = gamesData.filter(g=>g.topSeller).slice(0,8);
+        trending.forEach(g=>trendingRow.appendChild(createGameCard(g)));
+        newR.forEach(g=>newRow.appendChild(createGameCard(g)));
+        top.forEach(g=>topRow.appendChild(createGameCard(g)));
+      }
+
+      // skeleton
+      function showSkeleton() {
+        mainGrid.innerHTML = Array(8).fill(0).map(()=>`<div class="skeleton-card"></div>`).join('');
+      }
+
+      // filter logic
+      function applyFilters() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const selectedGenres = [...document.querySelectorAll('.genre-filter:checked')].map(cb=>cb.value);
+        const priceRadio = document.querySelector('input[name="price"]:checked').value;
+        const platforms = [...document.querySelectorAll('.platform-filter:checked')].map(cb=>cb.value);
+        
+        let filtered = gamesData.filter(game => {
+          if(searchTerm && !game.title.toLowerCase().includes(searchTerm)) return false;
+          if(selectedGenres.length && !selectedGenres.includes(game.genre)) return false;
+          if(platforms.length && !platforms.some(p=>game.platform.includes(p))) return false;
+          const priceVal = game.price;
+          if(priceRadio==='under20' && priceVal>=20) return false;
+          if(priceRadio==='20-40' && (priceVal<20||priceVal>40)) return false;
+          if(priceRadio==='over40' && priceVal<=40) return false;
+          return true;
+        });
+        currentFiltered = filtered;
+        renderGrid(filtered);
+      }
+
+      // modal
+      function openModal(game) {
+        const overlay = document.getElementById('gameModal');
+        const body = document.getElementById('modalBody');
+        body.innerHTML = `
+          <div style="display:flex; gap:24px; flex-wrap:wrap;">
+            <img src="${game.cover}" style="width:200px; border-radius:24px;">
+            <div>
+              <h2 style="font-size:2.5rem;">${game.title}</h2>
+              <p style="margin:12px 0"><i class="fas fa-tag"></i> ${game.genre} · ${game.platform.join(', ')}</p>
+              <div style="font-size:2rem; font-weight:800;">$${game.price.toFixed(2)}</div>
+              <button class="slide-cta" style="margin-top:24px;"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+            </div>
+          </div>
+        `;
+        overlay.classList.add('active');
+      }
+
+      // ---------- INITIALIZE ----------
+      function init() {
+        showSkeleton();
+        renderCategoryRows();
+        setTimeout(() => {
+          renderGrid(gamesData);
+        }, 200);
+        
+        // Carousel
+        const track = document.getElementById('carouselTrack');
+        const indicators = document.getElementById('carouselIndicators');
+        const slides = track.children;
+        let currentIndex = 0;
+        function updateCarousel(index) {
+          track.style.transform = `translateX(-${index * 100}%)`;
+          document.querySelectorAll('.indicator').forEach((dot,i)=> dot.classList.toggle('active', i===index));
+        }
+        for(let i=0;i<slides.length;i++) {
+          const dot = document.createElement('button'); dot.className='indicator'+(i===0?' active':'');
+          dot.addEventListener('click',()=> { currentIndex=i; updateCarousel(i); });
+          indicators.appendChild(dot);
+        }
+        setInterval(() => { currentIndex = (currentIndex+1) % slides.length; updateCarousel(currentIndex); }, 5000);
+        
+        // theme toggle
+        const themeBtn = document.getElementById('themeToggle');
+        themeBtn.addEventListener('click', ()=> document.body.classList.toggle('light'));
+        
+        // filter listeners
+        document.querySelectorAll('.genre-filter, .platform-filter, input[name="price"]').forEach(el=> el.addEventListener('change', applyFilters));
+        document.getElementById('searchBtn').addEventListener('click', applyFilters);
+        document.getElementById('searchInput').addEventListener('keyup', (e)=> { if(e.key==='Enter') applyFilters(); });
+        document.getElementById('clearFilters').addEventListener('click', ()=>{
+          document.querySelectorAll('.genre-filter:checked, .platform-filter:checked').forEach(cb=>cb.checked=false);
+          document.querySelector('input[name="price"][value="all"]').checked = true;
+          document.getElementById('searchInput').value = '';
+          applyFilters();
+        });
+        
+        // modal close
+        document.getElementById('closeModal').addEventListener('click', ()=> document.getElementById('gameModal').classList.remove('active'));
+        window.addEventListener('click', (e)=> { if(e.target.classList.contains('modal-overlay')) document.getElementById('gameModal').classList.remove('active'); });
+        
+        // mobile filter toggle
+        document.getElementById('filterToggle').addEventListener('click', ()=> document.getElementById('filterSidebar').classList.toggle('open'));
+        
+        // scroll reveal
+        const observer = new IntersectionObserver((entries)=> entries.forEach(e=> { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.1});
+        document.querySelectorAll('.fade-up').forEach(el=> observer.observe(el));
+      }
+
+      window.addEventListener('DOMContentLoaded', init);
+    })();
+  </script>
+  <!-- additional micro-interactions & polish -->
+  <style>
+    /* extra hover / glow */
+    .game-card .wishlist-btn i { pointer-events: none; }
+    .slide-cta i { transition: transform 0.2s; }
+    .slide-cta:hover i { transform: translateX(5px); }
+    .filter-option input { accent-color: var(--accent-glow); }
+    ::selection { background: var(--accent-glow); color: white; }
+    .modal-content { animation: modalPop 0.3s; }
+    @keyframes modalPop { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
+    @keyframes fadeSlide { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+  </style>
+</body>
+</html>
